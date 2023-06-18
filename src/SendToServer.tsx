@@ -1,14 +1,12 @@
-export default function Pressed ({ ...props }) {
+export default function SendToServer ({ ...props }) {
     return <>
         <button onClick={ () => {
 
             const data = {
-                'game_id': Math.random(),
+                'game_id': props.game,
                 'dices': props.dices,
                 'category': props.category,
             };
-
-            console.log(data)
             
             fetch('http://localhost:8894/move', {
                 method: 'POST',
@@ -16,7 +14,8 @@ export default function Pressed ({ ...props }) {
                 body: JSON.stringify(data),
             })
                 .then(resp => resp.json())
-                .then(json => console.log(json))
+                .then(json => props.sendResult(json))
+                .then(() => props.resetGame())
                 .catch(err => console.error(err))
 
         }}>send to server</button>
